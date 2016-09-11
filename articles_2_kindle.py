@@ -1,3 +1,4 @@
+
 import urllib.request
 import re
 import os.path
@@ -10,6 +11,7 @@ from email import encoders
 
 path_to_script = os.path.dirname(os.path.abspath(__file__))
 print(path_to_script)
+playorder = 2 # toc.ncx
 ######
 
 os.makedirs(path_to_script+str('/META-INF'), exist_ok=True)
@@ -57,21 +59,16 @@ data = parse_link('http://www.scientificamerican.com/section/lateststories/?page
 links = re.findall(r'article/(.*?)/"', str(data)) # Finds links to articles
 links = set(list(map(lambda x: 'http://www.scientificamerican.com/article/'+str(x), links))) # Fixes url address
 
-playorder = 2 # toc.ncx
+######
 
-###### Clean up later ..
+path = [path_to_script, path_to_script+str('/META-INF/'),path_to_script+str('/OEBPS/'),path_to_script+str('/OEBPS/'),path_to_script+str('/OEBPS/Styles/'),path_to_script + str('/OEBPS/Text/'),path_to_script+str('/OEBPS/Text/'),path_to_script+str('/OEBPS/Text/'),path_to_script + str('/OEBPS/Text/'),path_to_script+str('/OEBPS/Text/')]
+title = ['/mimetype','container.xml', 'content.opf','toc.ncx','stylesheet.css','title.xhtml','toc.xhtml','copyright.xhtml','cover.xhtml','backcover.xhtml']
+source_file = ['application/epub+zip', epub_source_files.container_xml,epub_source_files.content_opf_default,epub_source_files.toc_ncx_default,epub_source_files.stylesheet,epub_source_files.title_default,epub_source_files.toc_xhtml_default,epub_source_files.copyright, '','']
 
-make_default_file(path_to_script, '/mimetype', 'application/epub+zip')
-make_default_file(path_to_script+str('/META-INF/'), 'container.xml', epub_source_files.container_xml)
-make_default_file(path_to_script+str('/OEBPS/'), 'content.opf', epub_source_files.content_opf_default)
-make_default_file(path_to_script+str('/OEBPS/'), 'toc.ncx', epub_source_files.toc_ncx_default)
-make_default_file(path_to_script+str('/OEBPS/Styles/'), 'stylesheet.css', epub_source_files.stylesheet)
-make_default_file(path_to_script+str('/OEBPS/Text/'), 'title.xhtml', epub_source_files.title_default)
-make_default_file(path_to_script+str('/OEBPS/Text/'), 'toc.xhtml', epub_source_files.toc_xhtml_default)
-make_default_file(path_to_script+str('/OEBPS/Text/'), 'toc.xhtml', epub_source_files.toc_xhtml_default)
-make_default_file(path_to_script+str('/OEBPS/Text/'), 'copyright.xhtml', epub_source_files.copyright)
-make_default_file(path_to_script+str('/OEBPS/Text/'), 'cover.xhtml', '')
-make_default_file(path_to_script+str('/OEBPS/Text/'), 'backcover.xhtml', '')
+print(len(path), len(title), len(source_file))
+for i in range(0, len(path)-1):
+    make_default_file(path[i], title[i], source_file[i])
+    i+=1
 
 ######
 
@@ -134,8 +131,8 @@ os.system('ebook-convert test.zip test.mobi')
 #######
 #######
 
-fromaddr = "FROM_EMAIL_ADDRESS"
-toaddr = "TO_EMAIL_ADDRESS@kindle.com"
+fromaddr = "SEND_FROM_EMAIL"
+toaddr = "SEND_TO_EMAIL@kindle.com"
 
 msg = MIMEMultipart()
 
@@ -148,7 +145,7 @@ body = ""
 msg.attach(MIMEText(body, 'plain'))
 
 filename = "test.mobi"
-attachment = open(path_to_script+str(' a/test.mobi'), "rb")
+attachment = open(path_to_script+str('/test.mobi'), "rb")
 
 part = MIMEBase('application', 'octet-stream')
 part.set_payload((attachment).read())
@@ -163,3 +160,6 @@ server.login(fromaddr, "PASSWORD")
 text = msg.as_string()
 server.sendmail(fromaddr, toaddr, text)
 server.quit()
+
+
+
