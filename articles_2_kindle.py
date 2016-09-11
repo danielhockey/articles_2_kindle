@@ -9,10 +9,11 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
-path_to_script = os.path.dirname(os.path.abspath(__file__))
+path_to_script = os.path.dirname(os.path.abspath(__file__)) 
 print(path_to_script)
 playorder = 2 # toc.ncx
-######
+
+###### Make directory's
 
 os.makedirs(path_to_script+str('/META-INF'), exist_ok=True)
 os.makedirs(path_to_script+str('/OEBPS'), exist_ok=True)
@@ -20,7 +21,7 @@ os.makedirs(path_to_script+str('/OEBPS/Styles'), exist_ok=True)
 os.makedirs(path_to_script+str('/OEBPS/Images'), exist_ok=True)
 os.makedirs(path_to_script+str('/OEBPS/Text'), exist_ok=True)
 
-######
+###### Functions
 
 def make_default_file(dir, file, content_for_file):
     with open(str(dir)+str(file), 'w') as file:
@@ -53,13 +54,13 @@ def inplace_change(filename, old_string, new_string):
         s = s.replace(old_string, new_string)
         f.write(s)
 
-######
+###### Scrape links to articles
 
 data = parse_link('http://www.scientificamerican.com/section/lateststories/?page=1')
 links = re.findall(r'article/(.*?)/"', str(data)) # Finds links to articles
 links = set(list(map(lambda x: 'http://www.scientificamerican.com/article/'+str(x), links))) # Fixes url address
 
-######
+###### Creates and writes to files (using epub_source_files variables)
 
 path = [path_to_script, path_to_script+str('/META-INF/'),path_to_script+str('/OEBPS/'),path_to_script+str('/OEBPS/'),path_to_script+str('/OEBPS/Styles/'),path_to_script + str('/OEBPS/Text/'),path_to_script+str('/OEBPS/Text/'),path_to_script+str('/OEBPS/Text/'),path_to_script + str('/OEBPS/Text/'),path_to_script+str('/OEBPS/Text/')]
 title = ['/mimetype','container.xml', 'content.opf','toc.ncx','stylesheet.css','title.xhtml','toc.xhtml','copyright.xhtml','cover.xhtml','backcover.xhtml']
@@ -70,7 +71,8 @@ for i in range(0, len(path)-1):
     make_default_file(path[i], title[i], source_file[i])
     i+=1
 
-######
+###### Works on each link(article) indiviually and scrapes wanted data.
+###### Appends data to proper files
 
 for link in links:
 
@@ -124,11 +126,13 @@ inplace_change(full_path_location_opf, '<GUIDE>', '')
 inplace_change(full_path_location_tocxhtml, '<TOC>', '')
 inplace_change(full_path_location_tocncx, '<NAVSTART>', '')
 
+###### Executes shell commands (NEED zip and ebook-converter)
+
 os.system("zip -r test.zip mimetype OEBPS META-INF | mv test.zip test.epub")
 os.system('ebook-convert test.zip test.mobi')
 
 #######
-#######
+####### Sends .mobi to kindle email
 #######
 
 fromaddr = "SEND_FROM_EMAIL"
