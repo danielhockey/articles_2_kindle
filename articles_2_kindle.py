@@ -118,7 +118,7 @@ for link in links:
     print(str(playorder-1) + ': ' + header_1)
     playorder += 1
 
-###### Remove extensions in files and zip + rename
+###### Remove extensions in files
 
 inplace_change(full_path_location_opf, '<MANIFEST>', '')
 inplace_change(full_path_location_opf, '<SPINE>', '')
