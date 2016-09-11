@@ -2,6 +2,8 @@ Currently only set up to work for Scientific American.
 
 Best used in a standalone folder.
 
-Change password and email.
+Change password and email address in order to send file.
 
-Requires ebook-convert(for epub to mobi(calibre) and zip
+Requires ebook-convert(calibre) for the epub to mobi conversion and zip.
+
+Runs in Linux.
