@@ -78,11 +78,11 @@ for i in range(0, len(path)-1):
 for link in links:
 
     article_page = parse_link(str(link))
-
-    header_1 = (re.findall(r'"og:title" content="(.*?)" ', str(article_page)))[0]
+    
+    header_1 = (re.findall(r'"og:title" content="(.*?)" ', str(article_page)))[0]  
     header_1 = remove_ugly_text(header_1)
 
-    header_2 = (re.findall(r'"og:description" content="(.*?)" ', str(article_page)))[0]
+    header_2 = (re.findall(r'"og:description" content="(.*?)" ', str(article_page)))[0] # regex so bad all the coders want to kill me.
     header_2 = remove_ugly_text(header_2)
 
     article = re.findall(r'="article-block article-text">(.*?)</p></div>', str(article_page))[0]
