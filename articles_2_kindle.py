@@ -61,6 +61,7 @@ links = re.findall(r'article/(.*?)/"', str(data)) # Finds links to articles
 links = set(list(map(lambda x: 'http://www.scientificamerican.com/article/'+str(x), links))) # Fixes url address
 
 ###### Creates and writes to files (using epub_source_files variables)
+###### (Tried to be more pythonic here, but ended up making it far more complex). I like it!
 
 path = [path_to_script, path_to_script+str('/META-INF/'),path_to_script+str('/OEBPS/'),path_to_script+str('/OEBPS/'),path_to_script+str('/OEBPS/Styles/'),path_to_script + str('/OEBPS/Text/'),path_to_script+str('/OEBPS/Text/'),path_to_script+str('/OEBPS/Text/'),path_to_script + str('/OEBPS/Text/'),path_to_script+str('/OEBPS/Text/')]
 title = ['/mimetype','container.xml', 'content.opf','toc.ncx','stylesheet.css','title.xhtml','toc.xhtml','copyright.xhtml','cover.xhtml','backcover.xhtml']
